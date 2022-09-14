@@ -14,8 +14,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('blog.urls')),
 ]
+
+
+"""
+1. server nevét - weboldalam nevét: 127.0.0.1:8000/about vagy localhost:8000 -> 
+2. majd a project mappa urls.py-ből a megfelelő url-hez - ha include-van -
+akkor az aktuális applikáció urls.py file-jában megkeresi az urlt és behelyettesíti
+127.0.0.1:8000/
+az ott megadott értéket
+"""
