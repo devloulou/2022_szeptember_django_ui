@@ -23,7 +23,6 @@ def register(request):
             usr_obj = User.objects.filter(username=username).first()
             prof_temp = ProfileModel.objects.create(user_id=usr_obj.pk)
             
-            # itt kell létrehoznom a profilt
             messages.success(request, f"Your account has been created! You are able to login!")
             return redirect('login')
 
