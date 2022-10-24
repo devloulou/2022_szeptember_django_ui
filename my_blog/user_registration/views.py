@@ -4,6 +4,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import ProfileModel
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
+
+from my_blog.settings import EMAIL_HOST_USER
 
 # MVT - MVC
 # register oldal
@@ -23,6 +26,15 @@ def register(request):
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
+            # ide kellene rakni az email küldést
+            username = form.cleaned_data.get('username')
+            subject = "Regisztrált user"
+            message = f"{username} regisztrált az oldalra"
+            try:
+                send_mail(subject, message, EMAIL_HOST_USER, [EMAIL_HOST_USER], fail_silently=False)
+            except Exception as e:
+                print(str(e))
+
             # username = form.cleaned_data.get('username')
             # usr_obj = User.objects.filter(username=username).first()
             # prof_temp = ProfileModel.objects.create(user_id=usr_obj.pk)            

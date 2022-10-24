@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import PostsModel
 from django.views.generic import (ListView,
                                 DetailView,
@@ -6,7 +6,8 @@ from django.views.generic import (ListView,
                                 UpdateView,
                                 DeleteView)
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-# Create your views here.
+from django.contrib.auth.models import User
+
 """
 MVC - MVT: Model View Template
 """
@@ -27,7 +28,20 @@ class PostListView(ListView):
     template_name = 'blog/home.html'
     context_object_name = 'posts'
     ordering = ['-date_posted']
-    paginate_by = 2
+    paginate_by = 5
+
+class UserPostListView(ListView):
+    model = PostsModel
+    template_name = 'blog/user_posts.html'
+    context_object_name = 'posts'
+    paginate_by = 3
+
+    def get_queryset(self):
+        # user_obj = User.objects.get(username=self.kwargs.get('username'))
+        user_obj = get_object_or_404(User, username=self.kwargs.get('username'))
+        data = PostsModel.objects.filter(author=user_obj).order_by('-date_posted')       
+        return data
+        
 
 class PostDetailView(DetailView):
     model = PostsModel
